@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="custom.js"></script>
+  </head>
+  <body>
+    <canvas
+      id="myChart"
+      aria-label="chart"
+      role="img"
+      width="700"
+      height="600"
+      style="margin-top: 50px"
+    ></canvas>
+
+    <script>
+      const ctx = document.getElementById("myChart");
+
+      console.log(ctx);
+
+      new Chart(ctx, {
+        // type: "bar",
+        // type: "line",
+        // type: "pie",
+        // type: "doughnut",
+        // type: "radar",
+        // type: "polarArea",
+        type: "bar",
+        data: {
+          labels: ["Python", "JavaScript", "PHP", "Java", "C#", "C++"],
+          datasets: [
+            {
+              label: "Programming Lanugages",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 3,
+              backgroundColor: [
+                "red",
+                "green",
+                "blue",
+                "yellow",
+                "orange",
+                "purple",
+              ],
+              borderColor: ["black", "red", "blue", "pink", "black", "red"],
+            },
+            // {
+            //   label: "# of users of a Programming Lanugage",
+            //   data: [12, 19, 3, 5, 2, 3],
+            //   borderWidth: 1,
+            // },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Custom Chart Title",
+            },
+          },
+          responsive: false,
+          layout: {
+            padding: {
+              left: 50,
+              right: 0,
+              top: 0,
+              bottom: 0,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+          animation: {
+            duration: 2000,
+            easing: "easeInBounce",
+          },
+          events: ["click"],
+          onClick: function (e) {
+            console.log('On Click');
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
