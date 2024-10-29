@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature Chart with Chart.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1/dist/chartjs-plugin-zoom.min.js"></script>
+
+  </head>
+  <body>
+
+    <canvas id="temperatureChart" width="800" height="400"></canvas>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('temperatureChart').getContext('2d');
+    const data = {
+        labels: ['6/10 7:58', '7/10 7:58', '8/10 7:58', '9/10 7:58', '11/10 7:58'],
+        datasets: [{
+            label: 'Temperature (°C)',
+            data: [5, 30, 15, 25, 5],
+            fill: false,
+            borderColor: '#007bff',
+            pointRadius: [0, 0, 0, 0, 5],
+            tension: 0.4,
+            borderWidth: 4,
+        }]
+    };
+
+    const options = {
+        scales: {
+            y: {
+                min: 0,
+                max: 40,
+                ticks: {
+                    stepSize: 5,
+                },
+                grid: {
+                    color: 'rgba(0,0,0,0.1)',
+                },
+            },
+            x: {
+                grid: {
+                    display: false,
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    mode: 'xy',
+                },
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                        speed: 0.1,
+                    },
+                    drag: {
+                        enabled: true,
+                    },
+                    mode: 'xy',
+                },
+            },
+        },
+        elements: {
+            line: {
+                borderWidth: 4,
+            },
+        },
+    };
+
+    // Registering the custom plugin
+    Chart.register({
+        id: 'backgroundFill',
+        beforeDraw(chart) {
+            const {ctx, chartArea: {top, bottom, left, right}, scales: {y}} = chart;
+            ctx.save();
+
+            // Drawing the background color between the bounds
+            const yUpper = y.getPixelForValue(25);
+            const yLower = y.getPixelForValue(5);
+            ctx.fillStyle = 'rgba(255, 165, 0, 0.1)'; // Light orange color with opacity
+            ctx.fillRect(left, yUpper, right - left, yLower - yUpper);
+
+            // Drawing upper bound line
+            ctx.strokeStyle = 'green';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(left, yUpper);
+            ctx.lineTo(right, yUpper);
+            ctx.stroke();
+
+            // Drawing lower bound line
+            ctx.beginPath();
+            ctx.moveTo(left, yLower);
+            ctx.lineTo(right, yLower);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options
+    });
+});
+
+    </script>
+  </body>
+</html>
